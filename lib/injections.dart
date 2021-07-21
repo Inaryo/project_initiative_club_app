@@ -1,58 +1,32 @@
 
 import 'package:get_it/get_it.dart';
+import 'package:project_initiative_club_app/features/Maps/data/datasources/maps_local_data_source.dart';
+import 'package:project_initiative_club_app/features/Maps/data/datasources/maps_remote_data_source.dart';
+import 'package:project_initiative_club_app/features/Maps/data/repositories/maps_repository.dart';
+import 'package:project_initiative_club_app/features/Maps/domain/repositories/maps_repository.dart';
+import 'package:project_initiative_club_app/features/Maps/domain/usecases/maps_data.dart';
+import 'package:project_initiative_club_app/features/Maps/presentation/blocs/maps_data/mapsdata_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
 
-  
-  //! Shared
-  sl.registerLazySingleton<NetworkInfo>(
-      () => NetWorkInfoImpl(dataConnectionChecker: sl()));
-
   //! Lost
-  sl.registerFactory(() => InitlostpageBloc(initLostPageUseCase: sl()));
-  sl.registerFactory(() => GetlostanimalsBloc());
+  sl.registerFactory(() => MapsdataBloc(mapsDataCase: sl()));
 
   //* UseCase
-  sl.registerLazySingleton(() => InitLostPageUseCase(lostRepository: sl()));
+  sl.registerLazySingleton(() => MapsDataCase(mapsRepository: sl()));
 
   //* Repository
-  sl.registerLazySingleton<LostRepository>(() => LostRepositoryImpl(
-      localDataSource: sl(), remoteDataSource: sl(), netWorkInfo: sl()));
+  sl.registerLazySingleton<MapsRepository>(() => MapsRepositoryImpl(
+      localDataSource: sl(), remoteDataSource: sl()));
 
   //*DataSources
-  sl.registerLazySingleton<LostRemoteDataSource>(
-      () => LostRemoteDataSourceImpl(geo: sl()));
-  sl.registerLazySingleton<LostLocalDataSource>(
-      () => LostLocalDataSourceImpl());
+  sl.registerLazySingleton<MapsRemoteDataSource>(
+      () => MapsRemoteDataSourceImpl());
+      
+  sl.registerLazySingleton<MapsLocalDataSource>(
+      () => MapsLocalDataSourceImpl());
 
-  //* Externals
-  sl.registerLazySingleton(() => Geoflutterfire());
-
-  //! Authentication
-  sl.registerFactory(() => IsloggedinBloc(isLoggedInCase: sl()));
-  sl.registerFactory(() => LogginginBloc(loggingInCase: sl()));
-  sl.registerFactory(() => RegisterBloc(registerCase: sl()));
-
-  //* UseCase
-  sl.registerLazySingleton(() => RegisterCase(authRepository: sl()));
-  sl.registerLazySingleton(() => IsLoggedInCase(authRepository: sl()));
-  sl.registerLazySingleton(() => LoggingInCase(authRepository: sl()));
-
-  //* Repository
-  sl.registerLazySingleton<AuthenticationRepository>(() =>
-      AuthenticationRepositoryImpl(
-          localDataSource: sl(), remoteDataSource: sl(), netWorkInfo: sl()));
-
-  //*DataSources
-  sl.registerLazySingleton<AuthenticationLocalDataSource>(
-      () => AuthenticationLocalDataSourceImpl());
-
-  sl.registerLazySingleton<AuthenticationRemoteDataSource>(
-      () => AuthenticationRemoteDataSourceImpl(fireBaseAuth: sl()));
-
-  //* Externals
-  sl.registerLazySingleton(() => FirebaseAuth.instance);
-  sl.registerLazySingleton(() => DataConnectionChecker());
+  
 }

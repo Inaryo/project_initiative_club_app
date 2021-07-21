@@ -1,82 +1,49 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:project_initiative_club_app/features/Maps/domain/entities/maps_data.dart';
+import 'package:project_initiative_club_app/features/Maps/presentation/blocs/maps_data/mapsdata_bloc.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/widgets/button_change.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/widgets/info_widget.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/widgets/maps_widget.dart';
+import 'package:project_initiative_club_app/injections.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_initiative_club_app/ressources/widgets/error.dart';
+import 'package:project_initiative_club_app/ressources/widgets/loading.dart';
 
-class MapsPage extends StatefulWidget {
-  MapsPage({Key? key}) : super(key: key) {
-    currentTitle = "USTHB MAPS";
-  }
 
-  @override
-  _MapsPageState createState() => _MapsPageState();
-}
-
-class _MapsPageState extends State<MapsPage> {
-  bool state_perso_map = true;
-  bool initialized = false;
-
-  final ButtonStyle style =
-      ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-
-  void createInfoClasse() async {
-    Map<String, dynamic> data =
-        await jsonDecode(await rootBundle.loadString('json/info_map.json'));
-    jsonData = data;
-
-    jsonData.forEach((key, value) {
-      listMapData.add(new MapsDataEntity(
-          images: value["images"],
-          title: value["title"],
-          description: value["description"]));
-    });
-
-    setState(() {
-      initialized = true;
-    });
-  }
-
-  @override
-  void initState() {
-    createInfoClasse();
-    super.initState();
-  }
+class MapsPage extends StatelessWidget {
+  const MapsPage ({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double screenW = MediaQuery.of(context).size.width;
-    double screenH = MediaQuery.of(context).size.height;
-    double heightImage = screenH / 2.5;
-    listMapData = [
-      MapsDataEntity(
-          images: ["images/pi/image_1.png"],
-          title: "Faculté Informatique",
-          description:
-              "La faculté d'informatique est situé entre celle de la FSTGAT et ......"),
-      MapsDataEntity(
-          images: ["images/pi/image_1.png"],
-          title: "Faculté Informatique",
-          description:
-              "La faculté d'informatique est situé entre celle de la FSTGAT et ......"),
-      MapsDataEntity(
-          images: ["images/pi/image_1.png"],
-          title: "Faculté Informatique",
-          description:
-              "La faculté d'informatique est situé entre celle de la FSTGAT et ......"),
-      MapsDataEntity(
-          images: ["images/pi/image_1.png"],
-          title: "Faculté Informatique",
-          description:
-              "La faculté d'informatique est situé entre celle de la FSTGAT et ......"),
-    ];
 
-    return Container(
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Maps")),
+        body:  
+           BlocProvider <MapsdataBloc>(
+            create: (_context) => sl<MapsdataBloc>(),
+            child: BlocBuilder<MapsdataBloc, MapsdataState>(
+              builder: (context, state) {
+                  if (state is Empty) {
+                    BlocProvider.of<MapsdataBloc>(context)
+                      .add(GetMapsDataEvent());
+
+                    return Container();
+                  } else if (state is Loading) {
+                    return LoadingWidget();
+                  } else if (state is Loaded) {
+                    return MapsWidget();
+                  } else if (state is Error) {
+                    return ErrorPage(message: state.message);
+                  }
+                  return Container();
+                },
+            )))); 
+  }
+}
+
+    /*Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -108,4 +75,6 @@ class _MapsPageState extends State<MapsPage> {
       ),
     );
   }
-}
+  */
+  */*/
+

@@ -20,11 +20,5 @@ abstract class NewsRepository {
   /// Return a [Failure] in case of any error .
   Future<Either<Failure, List<NewsEntity>>> getClubNews();
 
-  /// Return The Register UserObject
-  ///
-  /// Return a [Failure] in case of any error .
-  Future<Either<Failure, UserObject>> register(
-      {@required String email,
-      @required String password,
-      @required String displayName});
+  
 }

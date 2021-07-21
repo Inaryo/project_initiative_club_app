@@ -20,6 +20,15 @@ class ServerFailure extends Failure {
   List<Object?> get props => throw UnimplementedError();
 }
 
+class ClientFailure extends Failure {
+  final String message;
+  ClientFailure({required this.message}) : super(message: message);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
+
 // ignore: must_be_immutable
 class UnknownFailure extends Failure {
   final String message;

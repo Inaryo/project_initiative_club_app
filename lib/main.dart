@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:project_initiative_club_app/features/About%20Us/presentation/pages/about_us_page.dart';
 import 'package:project_initiative_club_app/features/About%20Us/presentation/pages/about_us_page_1.dart';
-import 'package:project_initiative_club_app/features/Maps/domain/entities/maps_data.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/pages/page_maps.dart';
 import 'package:project_initiative_club_app/features/News/presentation/pages/news_page.dart';
 import 'package:project_initiative_club_app/features/Scolarity/presentation/pages/scolarity_page.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'injections.dart' as serviceLocator;
 
-Future<void> getAllMapData() async {
-  Map<String, dynamic> data =
-      await jsonDecode(await rootBundle.loadString('json/info_map.json'));
-  jsonData = data;
-  print(jsonData);
-}
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(HomePage());
+  
+  await serviceLocator.init();
+
+  runApp(MapsPage());
 }
 
 class HomePage extends StatelessWidget {

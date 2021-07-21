@@ -4,19 +4,15 @@
         {
           "title": "Faculté Génie Civil",
           "description": "La Faculté de Génie Civile situé entre et entre ...",
-          "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"]  
+          "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"],  
+          "position" : {"longitude" : 574542.0,"latitude" : 4444.0}  
         },
-
         {
-            "title": "Faculté Mathématique",
-            "description": "La Faculté de Génie Civile situé entre et entre ...",
-            "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"]  
-        },
-
-        {
-            "title": "Faculté Génie Civil",
-            "description": "La Faculté de Génie Civile situé entre et entre ...",
-            "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"]  
+          "title": "Faculté Génie Civil",
+          "description": "La Faculté de Génie Civile situé entre et entre ...",
+          "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"],  
+          "position" : {"longitude" : 574542.0,"latitude" : 4444.0}  
         }
+        
     ]    
  }
