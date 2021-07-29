@@ -9,37 +9,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_initiative_club_app/ressources/widgets/error.dart';
 import 'package:project_initiative_club_app/ressources/widgets/loading.dart';
 
-
 class MapsPage extends StatelessWidget {
-  const MapsPage ({ Key? key }) : super(key: key);
+  const MapsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text("Maps")),
-        body:  
-           BlocProvider <MapsdataBloc>(
-            create: (_context) => sl<MapsdataBloc>(),
-            child: BlocBuilder<MapsdataBloc, MapsdataState>(
-              builder: (context, state) {
-                  if (state is Empty) {
-                    BlocProvider.of<MapsdataBloc>(context)
-                      .add(GetMapsDataEvent());
+        home: Scaffold(
+            appBar: AppBar(title: Text("Maps")),
+            body: BlocProvider<MapsdataBloc>(
+                create: (_context) => sl<MapsdataBloc>(),
+                child: BlocBuilder<MapsdataBloc, MapsdataState>(
+                  builder: (context, state) {
+                    if (state is Empty) {
+                      BlocProvider.of<MapsdataBloc>(context)
+                          .add(GetMapsDataEvent());
 
+                      return Container();
+                    } else if (state is Loading) {
+                      return LoadingWidget();
+                    } else if (state is Loaded) {
+                      return MapsWidget();
+                    } else if (state is Error) {
+                      return ErrorPage(message: state.message);
+                    }
                     return Container();
-                  } else if (state is Loading) {
-                    return LoadingWidget();
-                  } else if (state is Loaded) {
-                    return MapsWidget();
-                  } else if (state is Error) {
-                    return ErrorPage(message: state.message);
-                  }
-                  return Container();
-                },
-            )))); 
+                  },
+                ))));
   }
 }
 

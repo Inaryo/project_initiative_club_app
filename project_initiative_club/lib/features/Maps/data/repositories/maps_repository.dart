@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,65 +14,38 @@ import 'package:project_initiative_club_app/ressources/globals.dart';
 class MapsRepositoryImpl implements MapsRepository {
   final MapsRemoteDataSource remoteDataSource;
   final MapsLocalDataSource localDataSource;
-  
 
   MapsRepositoryImpl(
-      {required this.remoteDataSource,
-      required this.localDataSource});
-
-  
+      {required this.remoteDataSource, required this.localDataSource});
 
   @override
   Future<Either<Failure, List<MapsDataEntity>>> getMapsData() async {
-    
-        try {
-          List<MapsDataEntity> list = [];
+    try {
+      List<MapsDataEntity> list = [];
 
-          
-          Map<String,dynamic> json = await localDataSource.getJsonData();
-          
-          
-          List<dynamic> listJson = json['infos'];
+      Map<String, dynamic> json = await localDataSource.getJsonData();
 
-          listJson.forEach((element) {
-                list.add(MapsDataModel.fromJson(element));
-           });
-            listMapData = list;
-            return Right(list);
+      List<dynamic> listJson = json['infos'];
 
-          
-          
-
-        } on ClientException catch (error) {
-          return Left(ClientFailure(message: error.message));
-        }
+      listJson.forEach((element) {
+        list.add(MapsDataModel.fromJson(element));
+      });
+      listMapData = list;
+      return Right(list);
+    } on ClientException catch (error) {
+      return Left(ClientFailure(message: error.message));
+    }
   }
 
+  Future<Either<Failure, Map<PolylineId, Polyline>>> getRoutesFromPositions(
+      List<LatLng> positions) async {
+    try {
+      Map<PolylineId, Polyline> polylines;
+      polylines = await localDataSource.getRoutes(positions);
 
-  Future<Either<Failure, Map<PolylineId, Polyline> >> getRoutesFromPositions() async {
-    
-        try {
-          List<MapsDataEntity> list = [];
-
-          
-          Map<String,dynamic> json = await localDataSource.getJsonData();
-          
-          
-          List<dynamic> listJson = json['infos'];
-
-          listJson.forEach((element) {
-                list.add(MapsDataModel.fromJson(element));
-           });
-            listMapData = list;
-            return Right(list);
-
-          
-          
-
-        } on ClientException catch (error) {
-          return Left(ClientFailure(message: error.message));
-        }
+      return Right(polylines);
+    } on ClientException catch (error) {
+      return Left(ClientFailure(message: error.message));
+    }
   }
-
-
 }

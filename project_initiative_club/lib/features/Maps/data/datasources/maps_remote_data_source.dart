@@ -2,10 +2,7 @@ import 'package:meta/meta.dart';
 
 abstract class MapsRemoteDataSource {}
 
-class MapsRemoteDataSourceImpl
-    implements MapsRemoteDataSource {
-  
-
+class MapsRemoteDataSourceImpl implements MapsRemoteDataSource {
   MapsRemoteDataSourceImpl();
 
   /*@override
