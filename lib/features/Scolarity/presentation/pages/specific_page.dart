@@ -8,7 +8,7 @@ Widget SpecificScolarityPage(
 
   void getListData() {
     List<String> list = [];
-    scolarityData.forEach((element) {
+    [].forEach((element) {
       if (element[0] == value) {
         list = element;
       }

@@ -1,0 +1,18 @@
+{
+    "infos": [
+
+        {
+          "title": "Faculté Génie Civil",
+          "description": "La Faculté de Génie Civile situé entre et entre ...",
+          "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"],  
+          "position" : {"longitude" : 36.714976,"latitude" : 3.183090}  
+        },
+        {
+          "title": "Faculté Génie Civil",
+          "description": "La Faculté de Génie Civile situé entre et entre ...",
+          "images" : ["images/fac/preview_gc_1.png","fac/preview_gc_2.png","fac/preview_gc_3.png"],  
+          "position" : {"longitude" : 36.713945 ,"latitude" : 3.183863}  
+        }
+        
+    ]    
+ }
