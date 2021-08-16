@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:project_initiative_club_app/features/Scolarity/presentation/pages/specific_page.dart';
-import 'package:project_initiative_club_app/ressources/globals.dart';
+import 'package:project_initiative_club_app/features/Scolarity/presentation/widgets/choice_widgets.dart';
+
+/*class ScolarityPage extends StatefulWidget {
+  const ScolarityPage({Key? key}) : super(key: key);
+
+  @override
+  _ScolarityPageState createState() => _ScolarityPageState();
+}
+
+class _ScolarityPageState extends State<ScolarityPage> {
+  @override
+  Widget build(BuildContext context) {
+    return ScolarityChoiceWidget();
+  }
+}*/
 
 class ScolarityPage extends StatefulWidget {
   ScolarityPage({Key? key}) : super(key: key);
@@ -19,6 +33,7 @@ class _ScolarityPageState extends State<ScolarityPage> {
     "SM",
   ];
 
+  // ignore: non_constant_identifier_names
   Widget DropDownMenu() {
     return DropdownButton(
       focusColor: Colors.white,

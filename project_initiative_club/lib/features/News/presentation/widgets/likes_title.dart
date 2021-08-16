@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_initiative_club_app/features/News/domain/entities/newsEntity.dart';
 
+// ignore: non_constant_identifier_names
 Widget LikesAndModificationWidget(NewsEntity news) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,

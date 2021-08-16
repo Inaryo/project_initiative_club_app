@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_initiative_club_app/features/Maps/domain/entities/maps_data.dart';
+import 'package:project_initiative_club_app/features/Maps/presentation/blocs/maps_data/mapsdata_bloc.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/widgets/filter_button.dart';
+import 'package:project_initiative_club_app/features/Maps/presentation/widgets/info_widget.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
 
+// ignore: must_be_immutable
 class MapsWidget extends StatefulWidget {
-  const MapsWidget({Key? key}) : super(key: key);
+  List<int> currentFiltringCode;
+  final Polyline polyline;
+  MapsWidget(
+      {Key? key, required this.polyline, required this.currentFiltringCode})
+      : super(key: key);
 
   @override
   _MapsWidgetState createState() => _MapsWidgetState();
@@ -20,20 +27,21 @@ class _MapsWidgetState extends State<MapsWidget> {
   CameraPosition _initialPosition =
       CameraPosition(zoom: 14.5, target: LatLng(36.7121668, 3.1802495));
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
-  List<int> currentFiltringCode = [];
+  String departValue = "";
+  String destinationValue = "";
 
   List<MapsDataEntity> getFiltredList() {
     List<MapsDataEntity> list = [];
     markers.clear();
+
     listMapData.forEach((element) {
-      if (currentFiltringCode.contains(element.type)) {
-        var date = DateTime.now().microsecondsSinceEpoch;
-        MarkerId id = MarkerId("marker" + date.toString());
+      if (widget.currentFiltringCode.contains(element.type)) {
+        MarkerId id = MarkerId(element.title);
         InfoWindow info =
             InfoWindow(snippet: element.title, title: element.title);
-        var icon;
 
+        BitmapDescriptor icon = iconOther;
+        print(element.type.toString());
         switch (element.type) {
           case 0:
             icon = iconFood;
@@ -51,10 +59,9 @@ class _MapsWidgetState extends State<MapsWidget> {
             icon = iconOther;
             break;
         }
-        print(icon);
+
         markers[id] = Marker(
-            icon: iconFood,
-            consumeTapEvents: false,
+            icon: icon,
             infoWindow: info,
             markerId: id,
             position: element.position);
@@ -85,9 +92,6 @@ class _MapsWidgetState extends State<MapsWidget> {
     setState(() async {
       _controller = controller;
       await _controller.setMapStyle(mapStyle);
-      /* _controller.setMapStyle(
-          '[{"featureType": "poi.business","stylers": [{"visibility": "off"}]},{"featureType": "poi.park","elementType": "labels.text","stylers": [{"visibility": "off"}]},{"featureType": "poi.school","stylers": [{"visibility": "off"}]]');
-    */
     });
   }
 
@@ -129,7 +133,13 @@ class _MapsWidgetState extends State<MapsWidget> {
           );
         },
         child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) =>
+                          InfoWidget(entity: currentFiltredList[index])));
+            },
             child: Stack(children: [
               Center(
                   child: Container(
@@ -162,43 +172,68 @@ class _MapsWidgetState extends State<MapsWidget> {
                                         bottomLeft: Radius.circular(10.0),
                                         topLeft: Radius.circular(10.0)),
                                     image: DecorationImage(
-                                        image: NetworkImage(
+                                        image: AssetImage(
                                             currentFiltredList[index]
                                                 .images[0]),
                                         fit: BoxFit.cover))),
                             SizedBox(width: 5.0),
-                            Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    currentFiltredList[index].title,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 12.5,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Container(
-                                    width: 170.0,
-                                    child: Text(
-                                      currentFiltredList[index].description,
+                            Flexible(
+                              child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      currentFiltredList[index].title,
                                       overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: 11.0,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 12.5,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  )
-                                ])
+                                    Container(
+                                      width: 170.0,
+                                      child: Text(
+                                        currentFiltredList[index].description,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                            fontSize: 11.0,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    )
+                                  ]),
+                            )
                           ]))))
             ])));
   }
 
   @override
   Widget build(BuildContext context) {
+    Map<String, MapsDataEntity> mapsData = {};
     currentFiltredList = getFiltredList();
+
+    if (currentFiltredList.isNotEmpty) {
+      mapsData = Map.fromIterable(
+        currentFiltredList,
+        key: (element) => element.title,
+        value: (element) => element,
+      );
+    } else {
+      mapsData = {
+        "Activer le fitre voulu": MapsDataEntity(
+            type: 9,
+            description: "d",
+            title: "r",
+            position: LatLng(0, 0),
+            images: [""])
+      };
+    }
+
+    departValue =
+        mapsData.isNotEmpty ? mapsData.keys.first : "Activer le fitre voulu";
+    destinationValue =
+        mapsData.isNotEmpty ? mapsData.keys.last : "Activer le fitre voulu";
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
@@ -213,8 +248,11 @@ class _MapsWidgetState extends State<MapsWidget> {
           initialCameraPosition: _initialPosition,
           myLocationEnabled: true,
           mapType: MapType.hybrid,
+          polylines: Set<Polyline>.of([widget.polyline]),
         ),
       ),
+
+      // List des Batiments
       Positioned(
         bottom: 20.0,
         child: Container(
@@ -228,25 +266,142 @@ class _MapsWidgetState extends State<MapsWidget> {
             },
           ),
         ),
-      )
-
+      ),
       // Filtre des Informations
-      ,
+
       Positioned(
-          top: 25,
+          top: 60,
           child: FilterButtonWidget(
             filterFunction: modifyFilter,
           )),
+
+      //Boutton des itineéraires
+      Positioned(
+        top: 20,
+        height: 30,
+        child: ElevatedButton(
+          onPressed: () => showDialog<String>(
+              context: context,
+              builder: (falseContext) {
+                return StatefulBuilder(builder: (falseContext, setState) {
+                  return AlertDialog(
+                    title: const Text('Choisissez votre itinéraire'),
+                    content: Column(
+                      children: [
+                        DropdownButton<String>(
+                          value: departValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              departValue = newValue!;
+                            });
+                          },
+                          items: mapsData.keys
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                        DropdownButton<String>(
+                          value: destinationValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              destinationValue = newValue!;
+                            });
+                          },
+                          items: mapsData.keys
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, "Cancel");
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, "Let's Go");
+                          BlocProvider.of<MapsdataBloc>(context)
+                              .add(ItineraryEvent(positionList: {
+                            departValue + destinationValue: [
+                              mapsData[departValue]!.position,
+                              mapsData[destinationValue]!.position
+                            ]
+                          }));
+                        },
+                        child: const Text("Let's Go"),
+                      ),
+                    ],
+                  );
+                });
+              }),
+          child: Text('Créer un itinéraire'),
+        ),
+      )
     ]);
   }
 
   void modifyFilter(int index) {
     setState(() {
-      if (currentFiltringCode.contains(index)) {
-        currentFiltringCode.remove(index);
+      if (widget.currentFiltringCode.contains(index)) {
+        widget.currentFiltringCode.remove(index);
       } else {
-        currentFiltringCode.add(index);
+        widget.currentFiltringCode.add(index);
       }
     });
+  }
+
+  Widget dropDownMenu(
+      Map<String, MapsDataEntity> mapsData, bool first, Function _function) {
+    first
+        ? departValue = mapsData.keys.first
+        : destinationValue = mapsData.keys.last;
+    return DropdownButton<String>(
+      value: first ? departValue : destinationValue,
+      icon: const Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        _function(() {
+          first ? departValue = newValue! : destinationValue = newValue!;
+        });
+      },
+      items: mapsData.keys.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
   }
 }

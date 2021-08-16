@@ -1,10 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:project_initiative_club_app/features/About%20Us/presentation/widgets/carousel_widget.dart';
 import 'package:project_initiative_club_app/features/About%20Us/presentation/widgets/section_widget.dart';
 
+// ignore: must_be_immutable
 class AboutUsPage extends StatelessWidget {
   AboutUsPage({Key? key}) : super(key: key);
   List<String> imagesPath = ["images/pi/slide_1.png", "images/pi/slide_2.png"];

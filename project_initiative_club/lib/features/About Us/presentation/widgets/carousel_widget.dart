@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 
 Widget carouselWidget(List<String> imagesPath, double screenH, double screenW) {
   return CarouselSlider(
-    options: CarouselOptions(height: 400.0, aspectRatio: 4 / 3),
-    items: imagesPath.map((path) {
-      return Builder(
-        builder: (BuildContext context) {
-          return CachedNetworkImage(
-            imageUrl: path,
-            width: screenW,
-            height: screenH / 3,
-          );
-        },
-      );
-    }).toList(),
+    items: imagesPath
+        .map((path) => Container(
+                child: Container(
+              margin: EdgeInsets.all(5.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Image.asset(path, fit: BoxFit.fill),
+              ),
+            )))
+        .toList(),
+    options: CarouselOptions(
+      autoPlay: true,
+      aspectRatio: 4 / 3,
+      enlargeCenterPage: true,
+    ),
   );
 }

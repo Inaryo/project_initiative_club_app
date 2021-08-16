@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 // ignore: must_be_immutable
 abstract class Failure extends Equatable {
@@ -16,16 +15,15 @@ class ServerFailure extends Failure {
   ServerFailure({required this.message}) : super(message: message);
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 
+// ignore: must_be_immutable
 class ClientFailure extends Failure {
   final String message;
   ClientFailure({required this.message}) : super(message: message);
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 

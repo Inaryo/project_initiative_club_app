@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
 
 @override
+// ignore: non_constant_identifier_names
 Widget SpecificScolarityPage(
     {required String value, required double screenH, required double screenW}) {
   List<String> listData = [];

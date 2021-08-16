@@ -1,45 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:project_initiative_club_app/features/News/presentation/pages/add_news_page.dart';
 import 'package:project_initiative_club_app/features/News/presentation/widgets/pi_news.dart';
 import 'package:project_initiative_club_app/features/News/presentation/widgets/usthb_news.dart';
+import 'package:project_initiative_club_app/main.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
 
-class NewsPage extends StatelessWidget {
+class NewsPage extends StatefulWidget {
   NewsPage({Key? key}) : super(key: key) {
     currentTitle = "News Feed";
   }
 
   @override
-  Widget build(BuildContext context) {
-    Map<int, Color> colorCodes = {
-      50: Color.fromRGBO(255, 90, 34, .1),
-      100: Color.fromRGBO(255, 90, 34, .2),
-      200: Color.fromRGBO(255, 90, 34, .3),
-      300: Color.fromRGBO(255, 90, 34, .4),
-      400: Color.fromRGBO(255, 90, 34, .5),
-      500: Color.fromRGBO(255, 90, 34, .6),
-      600: Color.fromRGBO(255, 90, 34, .7),
-      700: Color.fromRGBO(255, 90, 34, .8),
-      800: Color.fromRGBO(255, 90, 34, .9),
-      900: Color.fromRGBO(255, 90, 34, 1),
-    };
+  _NewsPageState createState() => _NewsPageState();
+}
 
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 50,
-              titleSpacing: 0,
-              elevation: 0,
-              backgroundColor: MaterialColor(0xFFF15A22, colorCodes),
-              bottom: TabBar(
-                tabs: [Tab(child: Text("USTHB")), Tab(child: Text("PI CLUB"))],
-              ),
-            ),
-            body: TabBarView(
+List<bool> clickedBtns = [false, false, false];
+
+class _NewsPageState extends State<NewsPage> {
+  double elevationValue = 5;
+  @override
+  Widget build(BuildContext context) {
+    double screenW = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        SizedBox(
+          width: screenW,
+          height: 60,
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: mainColor),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                UsthbNews(),
-                PiNews(),
+                _container(0, "PI News"),
+                _container(1, "Usthb News"),
+                _container(2, "Add News")
               ],
-            )));
+            ),
+          ),
+        ),
+        _widget()
+      ],
+    );
+  }
+
+  void onClickeBtn(int index) {
+    setState(() {
+      clickedBtns = [false, false, false];
+      clickedBtns[index] = true;
+    });
+  }
+
+  Widget _widget() {
+    if (clickedBtns[0]) {
+      return PiNews();
+    } else if (clickedBtns[1]) {
+      return UsthbNews();
+    } else {
+      return AddNewsPage();
+    }
+  }
+
+  Widget _container(int index, String text) {
+    return Container(
+        child: TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(mainColor),
+          ),
+          onPressed: () {
+            onClickeBtn(index);
+          },
+          child: Text(text, style: TextStyle(color: Colors.white)),
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: clickedBtns[index]
+                  ? BorderSide(color: Colors.white, width: 4)
+                  : BorderSide(width: 0, color: mainColor)),
+        ));
   }
 }

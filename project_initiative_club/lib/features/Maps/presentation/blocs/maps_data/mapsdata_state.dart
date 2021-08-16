@@ -3,17 +3,20 @@ part of 'mapsdata_bloc.dart';
 @immutable
 abstract class MapsdataState {}
 
-
-
-class Empty extends MapsdataState {}
+class EmptyData extends MapsdataState {}
 
 class Loading extends MapsdataState {}
 
-class Loaded extends MapsdataState {
+class MapsDataLoaded extends MapsdataState {
   final List<MapsDataEntity> mapsDataList;
-  Loaded({required this.mapsDataList});
+  MapsDataLoaded({required this.mapsDataList});
 }
 
+class ItineraryLoaded extends MapsdataState {
+  final PolyLineEntity routes;
+
+  ItineraryLoaded({required this.routes});
+}
 
 class Error extends MapsdataState {
   final String message;

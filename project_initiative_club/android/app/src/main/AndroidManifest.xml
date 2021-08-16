@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.project_initiative_club_app">
    <application
+   android:requestLegacyExternalStorage="true"
         android:label="project_initiative_club_app"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:name="androidx.multidex.MultiDexApplication">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,8 +41,9 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyD_jwnF83AaA_BhdxboBHAfm6xair87iaI"/>
+               android:value="AIzaSyCehlNhIUff2KRlwvc6h1W1NmyfGYjKY5U"/>
                    
     </application>
 </manifest>

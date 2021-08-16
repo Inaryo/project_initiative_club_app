@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:project_initiative_club_app/ressources/globals.dart';
 
+// ignore: must_be_immutable
 class FilterButtonWidget extends StatefulWidget {
   Function filterFunction;
   FilterButtonWidget({Key? key, required this.filterFunction})
@@ -15,9 +16,7 @@ class FilterButtonWidget extends StatefulWidget {
 class _FilterButtonWidgetState extends State<FilterButtonWidget>
     with SingleTickerProviderStateMixin {
   late Animation _animRotation;
-  late Animation _animSlide;
   bool isFav = false;
-  List<bool> statesFilters = [false, false, false, false, false];
   late AnimationController _animController;
   @override
   void initState() {
@@ -123,26 +122,3 @@ class _FilterButtonWidgetState extends State<FilterButtonWidget>
         });
   }
 }
-
-/*TweenAnimationBuilder(
-      duration: Duration(milliseconds: 1200),
-      tween: Tween<double>(begin: _begin, end: _end),
-      builder: (BuildContext _context, double _val, _) {
-        if (_val == _end && _val == 1) {
-          _end = 0;
-          _begin = 1;
-        } else if (_val == _end && _val == 0) {
-          _end = 1;
-          _begin = 0;
-        }
-
-        return GestureDetector(
-          onTap: () {},
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Transform.rotate(
-                angle: math.pi, child: Icon(Icons.expand_less_outlined)),
-            SizedBox(width: 5),
-          ]),
-        );
-      },
-    )*/

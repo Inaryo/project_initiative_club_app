@@ -1,8 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:project_initiative_club_app/features/Maps/domain/entities/maps_data.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+class InfoWidget extends StatelessWidget {
+  final MapsDataEntity entity;
+  InfoWidget({Key? key, required this.entity}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("test"),
+      ),
+      body: Column(
+        children: [
+          CarouselSlider(
+            items: entity.images
+                .map((e) => Container(
+                        child: Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        child: Image.asset(e, fit: BoxFit.cover, width: 1000.0),
+                      ),
+                    )))
+                .toList(),
+            options: CarouselOptions(
+              autoPlay: true,
+              aspectRatio: 2.0,
+              enlargeCenterPage: true,
+            ),
+          ),
+          Text(entity.title),
+          Text(entity.description)
+        ],
+      ),
+    );
+  }
+}
+
+/*import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:project_initiative_club_app/features/Maps/domain/entities/maps_data.dart';
 import 'package:project_initiative_club_app/features/Maps/presentation/widgets/description_window.dart';
-import 'package:project_initiative_club_app/ressources/globals.dart';
 
 Widget InfoListWidget(
     {required BuildContext context,
@@ -37,8 +77,7 @@ Widget InfoListWidget(
   );
 }
 
-
- /*ConstrainedBox(
+/*ConstrainedBox(
       constraints:
           BoxConstraints.tightFor(width: screenW, height: screenH / 10),
       child: Column(
@@ -73,4 +112,4 @@ showAlertDialog(BuildContext context, String title, String description,
           ),
         );
       });
-}*/
+}*/*/

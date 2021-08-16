@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:project_initiative_club_app/features/News/domain/entities/newsEntity.dart';
 import 'package:project_initiative_club_app/features/News/presentation/widgets/likes_title.dart';
 import 'package:project_initiative_club_app/features/News/presentation/widgets/specific_news.dart';
@@ -15,7 +14,7 @@ class NewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double sizeH = MediaQuery.of(context).size.height;
     double sizeW = MediaQuery.of(context).size.width;
-    double cardSizeH = sizeH * 0.25;
+    double cardSizeH = sizeW * 0.55;
     double cardSizeW = sizeW * 0.9;
     BorderRadius borderRadius = BorderRadius.all(Radius.circular(20));
 
@@ -40,7 +39,7 @@ class NewsCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: borderRadius,
                 child: CachedNetworkImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     placeholder: (context, url) => CircularProgressIndicator(),
                     imageUrl: news.coverImage),
               ),
@@ -88,12 +87,6 @@ class NewsCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _dialog() {
-    return AlertDialog(
-      title: Text("Liked Yeah !"),
     );
   }
 }

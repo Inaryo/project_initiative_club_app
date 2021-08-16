@@ -28,6 +28,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  firebase_core: ^1.4.0
   carousel_slider: ^4.0.0
   google_maps_flutter: ^2.0.6
   flutter_polyline_points: ^1.0.0
@@ -35,11 +36,16 @@ dependencies:
   equatable: ^2.0.3
   get_it: ^7.2.0
   flutter_bloc: ^7.0.1
-  
-    
+  path_provider: ^2.0.2
+  cloud_firestore: ^2.4.0
+  firebase_storage: ^10.0.1    
+  firestore_cache: ^2.1.1
+  image_picker: ^0.8.3
+  select_form_field: ^2.2.0  
+  path: ^1.8.0
+  flutter_markdown: ^0.6.4
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -57,14 +63,21 @@ flutter:
     - images/orange_logo.png
     - images/maps_preview.png
     - images/maps_preview_perso.png
+    - images/map/map.png
     - images/pi/image_1.png
     - images/pi/image_2.png
-    - images/pi/image_3.png
+    - images/pi/logo.png
     - images/pi/slide_1.png
     - images/pi/slide_2.png
     - images/pi/slide_3.png
+    - images/icons/icon_food_marker.png
+    - images/icons/icon_entry_marker.png
+    - images/icons/icon_faculty_marker.png
+    - images/icons/icon_other_marker.png
+    - images/icons/icon_administration_marker.png
     - json/styles.json
     - json/info_map.json
+    - json/scolarity_l1.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

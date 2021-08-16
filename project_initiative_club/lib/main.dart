@@ -1,36 +1,39 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project_initiative_club_app/features/About%20Us/presentation/pages/about_us_page_1.dart';
-import 'package:project_initiative_club_app/features/Maps/presentation/pages/page_maps.dart';
-import 'package:project_initiative_club_app/features/News/presentation/pages/news_page.dart';
-import 'package:project_initiative_club_app/features/Scolarity/presentation/pages/scolarity_page.dart';
-import 'package:project_initiative_club_app/ressources/globals.dart';
+import 'package:project_initiative_club_app/main_class.dart';
+import 'package:project_initiative_club_app/ressources/widgets/main_menu.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 import 'injections.dart' as serviceLocator;
 
-
 void main() async {
-  
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await serviceLocator.init();
 
-  runApp(MapsPage());
+  runApp(HomePage());
 }
 
+// TODO optimize the upload and the download
+// TODO optimize tracing database
 class HomePage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: currentTitle),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: ChangeNotifierProvider(
+          create: (_) => MainClass(),
+          child: MyHomePage(),
+        ));
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -40,91 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
   bool error = false;
   bool initialized = false;
 
-  Map<int, Color> colorCodes = {
-    50: Color.fromRGBO(255, 90, 34, .1),
-    100: Color.fromRGBO(255, 90, 34, .2),
-    200: Color.fromRGBO(255, 90, 34, .3),
-    300: Color.fromRGBO(255, 90, 34, .4),
-    400: Color.fromRGBO(255, 90, 34, .5),
-    500: Color.fromRGBO(255, 90, 34, .6),
-    600: Color.fromRGBO(255, 90, 34, .7),
-    700: Color.fromRGBO(255, 90, 34, .8),
-    800: Color.fromRGBO(255, 90, 34, .9),
-    900: Color.fromRGBO(255, 90, 34, 1),
-  };
-  Color selectedColor = Color.fromRGBO(255, 90, 34, 1);
-  Color notselectedColor = Colors.black;
-  int _selectedindex = 0;
-
-  void _ontapch(int index) {
-    setState(() {
-      _selectedindex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<Widget> _widgetOptions = <Widget>[
-      NewsPage(),
-      ScolarityPage(),
-      MapsPage(),
-      AboutUsPageSecondary(),
-    ];
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          toolbarHeight: 60,
-          centerTitle: true,
-          title: Text(
-            widget.title,
-            style: TextStyle(
-                fontSize: 30, color: MaterialColor(0xFFF15A22, colorCodes)),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.article,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "News",
-                  style: TextStyle(color: Colors.black),
-                )),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.school_outlined,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Scolarité",
-                  style: TextStyle(color: Colors.black),
-                )),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.map_outlined,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Maps",
-                  style: TextStyle(color: Colors.black),
-                )),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.info_outline,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Info",
-                  style: TextStyle(color: Colors.black),
-                )),
-          ],
-          currentIndex: _selectedindex,
-          onTap: _ontapch,
-        ),
-        body: Center(child: _widgetOptions.elementAt(_selectedindex)));
+    double screenW = MediaQuery.of(context).size.width;
+    double screenH = MediaQuery.of(context).size.height;
+    return MainMenu(
+      screenH: screenH,
+      screenW: screenW,
+    );
   }
 }

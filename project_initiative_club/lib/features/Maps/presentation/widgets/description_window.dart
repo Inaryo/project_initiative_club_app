@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/rendering.dart';
 
+// ignore: must_be_immutable
 class DescriptionWindow extends StatelessWidget {
   String title;
   String description;

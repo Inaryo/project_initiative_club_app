@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
+import 'package:project_initiative_club_app/features/Maps/data/models/PolyLineModel.dart';
+import 'package:project_initiative_club_app/features/Maps/domain/entities/polyline_entity.dart';
 import 'package:project_initiative_club_app/ressources/errors/exceptions.dart';
 import 'package:project_initiative_club_app/ressources/globals.dart';
 
@@ -13,7 +14,7 @@ abstract class MapsLocalDataSource {
   /// Throws a [ClientException] in any error case .
   Future<Map<String, dynamic>> getJsonData();
 
-  Future<Map<PolylineId, Polyline>> getRoutes(List<LatLng> positions);
+  Either<bool, PolyLineEntity> getPolyline(Map<String, List<LatLng>> positions);
 }
 
 class MapsLocalDataSourceImpl implements MapsLocalDataSource {
@@ -23,37 +24,22 @@ class MapsLocalDataSourceImpl implements MapsLocalDataSource {
       mapsStyle = await rootBundle.loadString('json/styles.json');
       dynamic result =
           await jsonDecode(await rootBundle.loadString('json/info_map.json'));
+
+      //polylinesJson = await rootBundle.loadString('json/routing.json');
+
       return result;
     } catch (e) {
       throw ClientException(e.toString());
     }
   }
 
-  Future<Map<PolylineId, Polyline>> getRoutes(List<LatLng> positions) async {
-    PolylinePoints polylinePoints = PolylinePoints();
-    Map<PolylineId, Polyline> polylines = {};
-    List<LatLng> polylineCoordinates = [];
-
-    try {
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-          googleApiKey,
-          PointLatLng(positions[0].latitude, positions[0].longitude),
-          PointLatLng(positions[1].latitude, positions[1].longitude));
-      if (result.points.isNotEmpty) {
-        result.points.forEach((PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
-      }
-
-      PolylineId id = PolylineId("poly");
-      Polyline polyline = Polyline(
-          polylineId: id, points: polylineCoordinates, color: mainColor);
-
-      polylines[id] = polyline;
-
-      return polylines;
-    } catch (e) {
-      throw ClientException(e.toString());
+  Either<bool, PolyLineEntity> getPolyline(
+      Map<String, List<LatLng>> positions) {
+    if (polylinesJson[positions.keys.first] != null) {
+      dynamic json = polylinesJson[positions.keys.first];
+      return Right(PolylineModel.fromJson(json));
+    } else {
+      return Left(true);
     }
   }
 }
